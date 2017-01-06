@@ -13,10 +13,20 @@ def command(flags):
         cmd += "xsendkeycode " + str(k) + " " + str(f) + "; "
     return cmd
 
-def input(flags, time=0.05):
+def input(flags, time=0):
     cmd = command(flags)
     subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     wait(time)
+
+def parse(fid):
+    with open(fid, "r") as f:
+        lines = f.read().splitlines()
+    inputs = []
+    for line in lines:
+        line = line.replace("[", "").replace("]", "")
+        input = [int(x.strip()) for x in line.split(",")]
+        inputs.append(input)
+    return inputs
 
 class Hori:
     def __init__(self):
@@ -29,7 +39,6 @@ class Hori:
 
     def read(self):
         pygame.event.pump()
-
         # Directions
         up, down, left, right = [0, 0, 0, 0]
         hat = self.fightstick.get_hat(0)
@@ -37,15 +46,13 @@ class Hori:
         elif hat[0] == -1: left = 1
         if hat[1] == 1: up = 1
         elif hat[1] == -1: down = 1
-
         # Punches
         lp = self.fightstick.get_button(keycodes.LP)
         mp = self.fightstick.get_button(keycodes.MP)
         hp = self.fightstick.get_button(keycodes.HP)
-
         # Kicks
         lk = self.fightstick.get_button(keycodes.LK)
         mk = self.fightstick.get_button(keycodes.MK)
         hk = self.fightstick.get_button(keycodes.HK)
-
+        # Return
         return [up, down, left, right, lp, mp, hp, lk, mk, hk]

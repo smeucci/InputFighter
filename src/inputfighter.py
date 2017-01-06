@@ -14,24 +14,18 @@ def read():
             inputs = fightstick.read()
             print inputs
             outfile.write(str(inputs) + "\n")
-            clock.tick(20)
+            clock.tick(120)
         except KeyboardInterrupt:
             sys.exit(0)
 
 def send():
+    clock = pygame.time.Clock()
+    dir = os.path.dirname(os.path.abspath(__file__))
+    inputs = utils.parse(dir + "/../data/inputs.txt")
     utils.wait(2)
-    utils.input([0, 0, 0, 0, 0, 0, 0, 0, 1, 0])
-    utils.input([0, 0, 1, 0, 0, 0, 0, 0, 0, 0])
-    utils.input([0, 1, 1, 0, 0, 0, 0, 0, 0, 0])
-    utils.input([0, 1, 0, 0, 0, 0, 0, 0, 0, 0])
-    utils.input([0, 1, 0, 1, 0, 0, 0, 0, 0, 0])
-    utils.input([0, 0, 0, 1, 0, 0, 0, 1, 1, 0])
-    utils.input([0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 1)
-    utils.input([0, 0, 0, 1, 0, 0, 0, 0, 0, 0])
-    utils.input([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    utils.input([0, 1, 0, 0, 0, 0, 0, 0, 0, 0])
-    utils.input([0, 1, 0, 1, 0, 0, 1, 0, 0, 0])
-    utils.input([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    for i in inputs:
+        utils.input(i)
+        clock.tick(60)
 
 def main():
     args = sys.argv
