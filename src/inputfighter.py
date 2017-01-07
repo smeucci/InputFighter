@@ -9,10 +9,12 @@ def read():
     clock = pygame.time.Clock()
     dir = os.path.dirname(os.path.abspath(__file__))
     outfile = open(dir + "/../data/inputs.txt", "w")
+    i = 0
     while True:
+        i += 1
         try:
             inputs = fightstick.read()
-            print inputs
+            print inputs, i
             outfile.write(str(inputs) + "\n")
             clock.tick(60)
         except KeyboardInterrupt:

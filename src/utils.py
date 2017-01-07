@@ -2,6 +2,7 @@ import subprocess
 import time, os, sys
 import keycodes
 import pygame
+import autopy.key as auto
 import Image
 import gtk.gdk
 
@@ -9,6 +10,7 @@ import gtk.gdk
 def wait(sec):
     time.sleep(sec)
 
+# deprecated
 def command(flags):
     cmd = ""
     keys = keycodes.KEYS
@@ -16,10 +18,17 @@ def command(flags):
         cmd += "xsendkeycode " + str(k) + " " + str(f) + "; "
     return cmd
 
-def input(flags, time=0):
+# deprecated
+def old_input(flags, time=0):
     cmd = command(flags)
     subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     wait(time)
+
+def input(flags):
+    keys = keycodes.AUTOGUIKEYS
+    for k, f in zip(keys, flags):
+        if f == 1: auto.toggle(k, True)
+        else: auto.toggle(k, False)
 
 def parse(fid):
     with open(fid, "r") as f:
