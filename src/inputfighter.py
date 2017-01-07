@@ -1,4 +1,4 @@
-import sys, os
+import sys, os, time
 import utils
 import pygame
 import inspect
@@ -9,12 +9,12 @@ def read():
     clock = pygame.time.Clock()
     dir = os.path.dirname(os.path.abspath(__file__))
     outfile = open(dir + "/../data/inputs.txt", "w")
-    while(1):
+    while True:
         try:
             inputs = fightstick.read()
             print inputs
             outfile.write(str(inputs) + "\n")
-            clock.tick(120)
+            clock.tick(60)
         except KeyboardInterrupt:
             sys.exit(0)
 
@@ -27,6 +27,21 @@ def send():
         utils.input(i)
         clock.tick(60)
 
+def capture():
+    clock = pygame.time.Clock()
+    dir = os.path.dirname(os.path.abspath(__file__))
+    imgdir = dir + "/../data/img/"
+    if not os.path.exists(imgdir): os.makedirs(imgdir)
+    timeout_start, timeout, i = time.time(), 1, 1
+    while time.time() < timeout_start + timeout:
+        try:
+            utils.screenshot(imgdir, i, 641, 480, 1, 55)
+            clock.tick(60)
+            i += 1
+        except KeyboardInterrupt:
+            break
+    print "Screenshots: " + str(i)
+
 def main():
     args = sys.argv
     if len(args) <= 1:
@@ -37,6 +52,8 @@ def main():
         read()
     elif args[1] == "--send":
         send()
+    elif args[1] == "--capture":
+        capture()
     else:
         print "Wrong argument provided.\n"
         sys.exit(0)
