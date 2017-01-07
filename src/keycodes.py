@@ -19,7 +19,7 @@ KEYS = [UP, DOWN, LEFT, RIGHT, K_LP, K_MP, K_HP, K_LK, K_MK, K_HK]
 
 # Keys for pyautogui
 
-AUTOGUIKEYS = ['w', 's', 'a', 'd', 'u', 'i', 'o', 'j', 'k', 'l']
+AUTOPYKEYS = ['w', 's', 'a', 'd', 'u', 'i', 'o', 'j', 'k', 'l']
 
 # for input reader
 # Hori buttons

@@ -25,7 +25,7 @@ def old_input(flags, time=0):
     wait(time)
 
 def input(flags):
-    keys = keycodes.AUTOGUIKEYS
+    keys = keycodes.AUTOPYKEYS
     for k, f in zip(keys, flags):
         if f == 1: auto.toggle(k, True)
         else: auto.toggle(k, False)
