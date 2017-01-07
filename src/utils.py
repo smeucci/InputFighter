@@ -1,7 +1,10 @@
 import subprocess
-import time
+import time, os, sys
 import keycodes
 import pygame
+import Image
+import gtk.gdk
+
 
 def wait(sec):
     time.sleep(sec)
@@ -28,6 +31,17 @@ def parse(fid):
         inputs.append(input)
     return inputs
 
+def screenshot(dir, index, width, height, offset_x=0, offset_y=0):
+    try:
+        im = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, False, 8, width, height)
+        im.get_from_drawable(gtk.gdk.get_default_root_window(), gtk.gdk.colormap_get_system(),
+                             offset_x, offset_y, 0, 0, width, height)
+    except:
+        exit()
+    final_im = Image.frombuffer("RGB", (width, height), im.get_pixels(),
+                                "raw", "RGB", im.get_rowstride(), 1)
+    final_im.save(dir + "frame-" + str(index) + ".jpg")
+
 class Hori:
     def __init__(self):
         try:
@@ -36,6 +50,7 @@ class Hori:
             self.fightstick.init()
         except:
             print "unable to connect to Hori"
+            sys.exit(0)
 
     def read(self):
         pygame.event.pump()
