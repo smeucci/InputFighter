@@ -7,16 +7,19 @@ DOWN = 39   # S
 LEFT = 38   # A
 RIGHT = 40  # D
 
-K_LP = 32     # O
-K_MP = 33     # P
-K_HP = 34     # E_GRAVE
+K_LP = 30   # U
+K_MP = 31   # I
+K_HP = 32   # O
 
-K_LK = 46     # L
-K_MK = 47     # O_GRAVE
-K_HK = 48     # A_GRAVE
+K_LK = 44   # J
+K_MK = 45   # K
+K_HK = 46   # L
 
 KEYS = [UP, DOWN, LEFT, RIGHT, K_LP, K_MP, K_HP, K_LK, K_MK, K_HK]
 
+# Keys for pyautogui
+
+AUTOGUIKEYS = ['w', 's', 'a', 'd', 'u', 'i', 'o', 'j', 'k', 'l']
 
 # for input reader
 # Hori buttons
