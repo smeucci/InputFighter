@@ -33,8 +33,8 @@ def screenshots(sec=1):
 
 def capture(sec=10):
     clock = pygame.time.Clock()
-    imgdir, start, i = setup("screenshots")
     fightstick, outfile, j = setup("read")
+    imgdir, start, i = setup("screenshots")
     while time.time() < start + sec:
         inputs = fightstick.read()
         screenshot(imgdir, i, 641, 480, 1, 55)
