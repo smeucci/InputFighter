@@ -36,7 +36,7 @@ def parse(fid):
     inputs = []
     for line in lines:
         line = line.replace("[", "").replace("]", "")
-        input = [int(x.strip()) for x in line.split(",")]
+        input = [int(x.strip()) for x in line.split(",")] # TODO convert int to bool
         inputs.append(input)
     return inputs
 
@@ -50,6 +50,31 @@ def screenshot(dir, index, width, height, offset_x=0, offset_y=0):
     final_im = Image.frombuffer("RGB", (width, height), im.get_pixels(),
                                 "raw", "RGB", im.get_rowstride(), 1)
     final_im.save(dir + "frame-" + str(index) + ".jpg")
+
+def setup_send():
+    dir = os.path.dirname(os.path.abspath(__file__))
+    return parse(dir + "/../data/cpu.txt")
+
+def setup_read():
+    fightstick = Hori()
+    dir = os.path.dirname(os.path.abspath(__file__))
+    outfile = open(dir + "/../data/inputs.txt", "w")
+    return fightstick, outfile, 1
+
+def setup_screenshots():
+    dir = os.path.dirname(os.path.abspath(__file__))
+    imgdir = dir + "/../data/img/"
+    if not os.path.exists(imgdir): os.makedirs(imgdir)
+    start = time.time()
+    return imgdir, start, 1
+
+def setup(name):
+    switch = {
+        'send': setup_send,
+        'read': setup_read,
+        'screenshots': setup_screenshots
+    }
+    return switch.get(name)()
 
 class Hori:
     def __init__(self):

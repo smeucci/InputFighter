@@ -1,48 +1,47 @@
 import sys, os, time
-import utils
+from utils import *
 import pygame
 import inspect
 
 
-def read():
-    fightstick = utils.Hori()
-    clock = pygame.time.Clock()
-    dir = os.path.dirname(os.path.abspath(__file__))
-    outfile = open(dir + "/../data/inputs.txt", "w")
-    i = 0
-    while True:
-        i += 1
-        try:
-            inputs = fightstick.read()
-            print inputs, i
-            outfile.write(str(inputs) + "\n")
-            clock.tick(60)
-        except KeyboardInterrupt:
-            sys.exit(0)
-
 def send():
     clock = pygame.time.Clock()
-    dir = os.path.dirname(os.path.abspath(__file__))
-    inputs = utils.parse(dir + "/../data/inputs.txt")
-    utils.wait(2)
+    inputs = setup("send")
+    wait(2)
     for i in inputs:
-        utils.input(i)
+        input(i)
         clock.tick(60)
 
-def capture():
+def read():
     clock = pygame.time.Clock()
-    dir = os.path.dirname(os.path.abspath(__file__))
-    imgdir = dir + "/../data/img/"
-    if not os.path.exists(imgdir): os.makedirs(imgdir)
-    timeout_start, timeout, i = time.time(), 1, 1
-    while time.time() < timeout_start + timeout:
-        try:
-            utils.screenshot(imgdir, i, 641, 480, 1, 55)
-            clock.tick(60)
-            i += 1
-        except KeyboardInterrupt:
-            break
+    fightstick, outfile, i = setup("read")
+    while True:
+        inputs = fightstick.read()
+        print inputs, i
+        outfile.write(str(inputs) + "\n")
+        clock.tick(60)
+        i += 1
+
+def screenshots(sec=1):
+    clock = pygame.time.Clock()
+    imgdir, start, i = setup("screenshots")
+    while time.time() < start + sec:
+        screenshot(imgdir, i, 641, 480, 1, 55)
+        clock.tick(60)
+        i += 1
     print "Screenshots: " + str(i)
+
+def capture(sec=10):
+    clock = pygame.time.Clock()
+    imgdir, start, i = setup("screenshots")
+    fightstick, outfile, j = setup("read")
+    while time.time() < start + sec:
+        inputs = fightstick.read()
+        screenshot(imgdir, i, 641, 480, 1, 55)
+        outfile.write(str(inputs) + "\n")
+        print inputs, j
+        clock.tick(60)
+        i += 1; j += 1
 
 def main():
     args = sys.argv
@@ -54,11 +53,18 @@ def main():
         read()
     elif args[1] == "--send":
         send()
+    elif args[1] == "--screenshots":
+        sec = int(args[2]) if len(args) > 2 else 1
+        screenshots(sec)
     elif args[1] == "--capture":
-        capture()
+        sec = int(args[2]) if len(args) > 2 else 10
+        capture(sec)
     else:
         print "Wrong argument provided.\n"
         sys.exit(0)
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        sys.exit(0)
