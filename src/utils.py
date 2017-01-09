@@ -10,26 +10,14 @@ import gtk.gdk
 def wait(sec):
     time.sleep(sec)
 
-# deprecated
-def command(flags):
-    cmd = ""
-    keys = keycodes.KEYS
-    for k, f in zip(keys, flags):
-        cmd += "xsendkeycode " + str(k) + " " + str(f) + "; "
-    return cmd
-
-# deprecated
-def old_input(flags, time=0):
-    cmd = command(flags)
-    subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    wait(time)
-
+# Toggle keyDown property for selected keys
 def input(flags):
     keys = keycodes.AUTOPYKEYS
     for k, f in zip(keys, flags):
         if f == 1: auto.toggle(k, True)
         else: auto.toggle(k, False)
 
+# Parse txt file containing list of 0-1 values as inputs
 def parse(fid):
     with open(fid, "r") as f:
         lines = f.read().splitlines()
@@ -40,16 +28,23 @@ def parse(fid):
         inputs.append(input)
     return inputs
 
+# Take a screenshot, if dir is not None save on disk, otherwise return the image
 def screenshot(dir, index, width, height, offset_x=0, offset_y=0):
     try:
         im = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, False, 8, width, height)
         im.get_from_drawable(gtk.gdk.get_default_root_window(), gtk.gdk.colormap_get_system(),
                              offset_x, offset_y, 0, 0, width, height)
     except:
-        exit()
+        sys.exit(0)
     final_im = Image.frombuffer("RGB", (width, height), im.get_pixels(),
                                 "raw", "RGB", im.get_rowstride(), 1)
-    final_im.save(dir + "frame-" + str(index) + ".jpg")
+    if dir != None: final_im.save(dir + "frame-" + str(index) + ".jpg")
+    else: return final_im
+
+
+###################
+# Setup functions #
+###################
 
 def setup_send():
     dir = os.path.dirname(os.path.abspath(__file__))
@@ -75,6 +70,19 @@ def setup(name):
         'screenshots': setup_screenshots
     }
     return switch.get(name)()
+
+
+##############
+# Classifier #
+##############
+
+def predict_fake(frame):
+    return [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+
+###########
+# Objects #
+###########
 
 class Hori:
     def __init__(self):
