@@ -7,7 +7,7 @@ import inspect
 def send():
     clock = pygame.time.Clock()
     inputs = setup("send")
-    wait(2)
+    time.sleep(2)
     for i in inputs:
         input(i)
         clock.tick(60)

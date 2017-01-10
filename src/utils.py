@@ -7,9 +7,6 @@ import Image
 import gtk.gdk
 
 
-def wait(sec):
-    time.sleep(sec)
-
 # Toggle keyDown property for selected keys
 def input(flags):
     keys = keycodes.AUTOPYKEYS
