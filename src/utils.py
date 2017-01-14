@@ -32,7 +32,7 @@ def screenshot(dir, index, width, height, offset_x=0, offset_y=0):
         im.get_from_drawable(gtk.gdk.get_default_root_window(), gtk.gdk.colormap_get_system(),
                              offset_x, offset_y, 0, 0, width, height)
     except:
-        sys.exit(0)
+        sys.exit(1)
     final_im = Image.frombuffer("RGB", (width, height), im.get_pixels(),
                                 "raw", "RGB", im.get_rowstride(), 1)
     if dir != None: final_im.save(dir + "frame-" + str(index) + ".jpg")
@@ -88,8 +88,8 @@ class Hori:
             self.fightstick = pygame.joystick.Joystick(0)
             self.fightstick.init()
         except:
-            print "unable to connect to Hori"
-            sys.exit(0)
+            print "Unable to connect to Hori"
+            sys.exit(1)
 
     def read(self):
         pygame.event.pump()

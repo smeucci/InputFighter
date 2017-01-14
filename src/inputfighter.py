@@ -62,10 +62,10 @@ def cpu():
 
 # Main
 def main():
-    args = sys.argv
-    if len(args) <= 1:
+    args = sys.argv # TODO use argparse
+    if len(args) < 2:
         print "No argument provided"
-        sys.exit(0)
+        sys.exit(1)
 
     if args[1] == "--read":
         read()
@@ -81,7 +81,7 @@ def main():
         cpu()
     else:
         print "Wrong argument provided.\n"
-        sys.exit(0)
+        sys.exit(1)
 
 if __name__ == "__main__":
     try:
